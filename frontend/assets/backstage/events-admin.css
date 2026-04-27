@@ -42,3 +42,25 @@
 /* ---- Tab content panels (driven by card-tab clicks) ---- */
 .evt-tab-content { display: none; }
 .evt-tab-content.is-active { display: block; }
+
+/* ---- Filter row form controls — token-driven so dark mode reads naturally.
+   Without these, native browser styles bleed through and render white-on-dark. */
+.events-filters-row select,
+.events-filters-row input[type="text"],
+.events-filters-row input[type="search"] {
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-md, 8px);
+    background: var(--surface-medium);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    font: inherit;
+    font-size: 0.9rem;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.events-filters-row select:focus,
+.events-filters-row input[type="text"]:focus,
+.events-filters-row input[type="search"]:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px var(--brand-primary-subtle);
+}
