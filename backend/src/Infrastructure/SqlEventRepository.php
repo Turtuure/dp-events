@@ -277,7 +277,7 @@ final class SqlEventRepository implements EventRepositoryInterface
               GROUP BY DATE(created_at)",
             [$tid],
         );
-        $drSpark = self::buildDailySeries30dBackward($drRows);
+        $drSpark = self::buildDailySeries30dBackward(array_values($drRows));
 
         return [
             'upcoming' => [
@@ -314,7 +314,7 @@ final class SqlEventRepository implements EventRepositoryInterface
               GROUP BY DATE(registered_at)",
             [$tid],
         );
-        $sparkline = self::buildDailySeries30dBackward($rows);
+        $sparkline = self::buildDailySeries30dBackward(array_values($rows));
 
         return ['value' => $value, 'sparkline' => $sparkline];
     }

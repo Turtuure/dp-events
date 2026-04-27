@@ -120,7 +120,7 @@ final class SqlEventProposalRepository implements EventProposalRepositoryInterfa
               GROUP BY DATE(created_at)',
             [$tid],
         );
-        $sparkline = self::buildDailySeries30dBackward($rows);
+        $sparkline = self::buildDailySeries30dBackward(array_values($rows));
 
         return ['value' => $value, 'sparkline' => $sparkline];
     }
