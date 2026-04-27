@@ -1,0 +1,44 @@
+/* ============================================================
+   Events admin list — card-tabs + tab-panel switching.
+
+   Table chrome (.events-filters-*, .events-table, .evt-pill, .evt-action,
+   .evt-coverage-cell, .evt-reg-count) lives in event-modal.css alongside
+   the modal tokens. This file only adds the card-tab + panel-visibility
+   layer needed for the new Events / Proposals tab UX.
+
+   Mirrors modules/projects/frontend/assets/backstage/projects-admin.css
+   so the two admin pages stay visually consistent.
+   ============================================================ */
+
+.events-admin { display: flex; flex-direction: column; gap: var(--space-4, 1.5rem); }
+
+/* ---- KPI card-tabs (clickable cards drive panel switching) ----
+   Uses base .kpi-card / .kpis-grid from the shared kpi-card module.
+   Active state = stronger border + tinted bg; hover = border highlight only.
+   No translate/scale animations (per user preference). Theme-aware via tokens. */
+.kpis-grid--tabs { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+.kpi-card--tab {
+    /* Override <button> defaults to match the regular .kpi-card look. */
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    width: 100%;
+    transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s;
+}
+.kpi-card--tab:hover { border-color: var(--brand-primary); }
+.kpi-card--tab:focus-visible {
+    outline: 2px solid var(--brand-primary);
+    outline-offset: -2px;
+}
+.kpi-card--tab.is-active {
+    border-color: var(--brand-primary);
+    background: var(--brand-primary-muted);
+    box-shadow: inset 0 0 0 1px var(--brand-primary);
+}
+.kpi-card--tab.is-active .kpi-card__label { color: var(--brand-primary); }
+
+/* ---- Tab content panels (driven by card-tab clicks) ---- */
+.evt-tab-content { display: none; }
+.evt-tab-content.is-active { display: block; }
