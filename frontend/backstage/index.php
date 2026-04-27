@@ -2,7 +2,10 @@
 /**
  * Backstage Events Admin
  *
- * CRUD for events: list, create, edit, publish, archive, manage registrations.
+ * List page: filters + table + KPI strip + Event Proposals sub-page card.
+ * Create/edit moved to dedicated sub-pages — modal markup removed.
+ *   /backstage/events/new           → modules/events/frontend/backstage/new/index.php
+ *   /backstage/events/edit?id=…     → modules/events/frontend/backstage/edit/index.php
  */
 
 declare(strict_types=1);
@@ -92,7 +95,7 @@ ob_start();
         <p class="page-header__subtitle">Create, edit, publish, and manage event registrations.</p>
     </div>
     <div>
-        <button type="button" class="btn btn--primary" id="btn-new-event">+ New event</button>
+        <a href="/backstage/events/new" class="btn btn--primary" id="btn-new-event">+ New event</a>
     </div>
 </div>
 
@@ -190,9 +193,6 @@ $kpis = [
     </div>
 </div>
 
-<!-- Create/Edit modal (built by event-modal.js) -->
-<div id="event-modal-mount"></div>
-
 </div><!-- /.events-admin -->
 
 <link rel="stylesheet" href="/modules/events/assets/backstage/event-modal.css">
@@ -201,9 +201,6 @@ $kpis = [
 <script>
 window.DAEMS_EVENTS = <?= json_encode($initial, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>;
 </script>
-<script src="/pages/backstage/shared/locale-cards.js"></script>
-<script src="/modules/events/assets/backstage/upload-widget.js"></script>
-<script src="/modules/events/assets/backstage/event-modal.js"></script>
 <script>
 (function () {
     'use strict';
@@ -269,9 +266,10 @@ window.DAEMS_EVENTS = <?= json_encode($initial, JSON_UNESCAPED_SLASHES | JSON_UN
             var id     = e.id || '';
             var canPub = e.status === 'draft' || e.status === 'archived';
             var canArc = e.status !== 'archived';
+            var editHref = '/backstage/events/edit?id=' + encodeURIComponent(id);
             return '<tr data-row-id="' + escHtml(id) + '">' +
                 '<td>' + (e.event_date || '-') + '</td>' +
-                '<td>' + escHtml(e.title || '') + '</td>' +
+                '<td><a class="evt-title-link" href="' + editHref + '">' + escHtml(e.title || '') + '</a></td>' +
                 '<td>' + typeLabel(e.type || '') + '</td>' +
                 '<td>' + statusPill(e.status || 'draft') + '</td>' +
                 '<td class="evt-coverage-cell">' + coverageBadge(id, e.coverage) + '</td>' +
@@ -281,9 +279,9 @@ window.DAEMS_EVENTS = <?= json_encode($initial, JSON_UNESCAPED_SLASHES | JSON_UN
                     '</button>' +
                 '</td>' +
                 '<td class="evt-actions">' +
-                    '<button type="button" class="evt-action" data-action="edit" data-id="' + escHtml(id) + '" title="Edit">' +
+                    '<a class="evt-action" href="' + editHref + '" title="Edit">' +
                         '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm17.71-10.21a1 1 0 0 0 0-1.42l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.82z"/></svg>' +
-                    '</button>' +
+                    '</a>' +
                     (canPub
                         ? '<button type="button" class="evt-action" data-action="publish" data-id="' + escHtml(id) + '" title="Publish">' +
                             '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm-1 14.5v-9l7 4.5z"/></svg>' +
@@ -298,14 +296,7 @@ window.DAEMS_EVENTS = <?= json_encode($initial, JSON_UNESCAPED_SLASHES | JSON_UN
             '</tr>';
         }).join('');
 
-        // Wire action buttons
-        tbody.querySelectorAll('[data-action="edit"]').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var id = btn.getAttribute('data-id');
-                var ev = events.find(function (e) { return e.id === id; });
-                if (ev) window.EventModal.open('edit', ev);
-            });
-        });
+        // Wire action buttons (edit is now a plain anchor — no JS needed)
         tbody.querySelectorAll('[data-action="publish"]').forEach(function (btn) {
             btn.addEventListener('click', function () { doPublish(btn.getAttribute('data-id')); });
         });
@@ -428,12 +419,6 @@ window.DAEMS_EVENTS = <?= json_encode($initial, JSON_UNESCAPED_SLASHES | JSON_UN
         }
     });
 
-    // New event button
-    var btnNew = document.getElementById('btn-new-event');
-    if (btnNew) {
-        btnNew.addEventListener('click', function () { window.EventModal.open('create'); });
-    }
-
     // Filter wiring
     function bindFilter(id, setter) {
         var el = document.getElementById(id);
@@ -446,12 +431,9 @@ window.DAEMS_EVENTS = <?= json_encode($initial, JSON_UNESCAPED_SLASHES | JSON_UN
         searchEl.addEventListener('input', function () { filterSearch = searchEl.value; renderTable(); });
     }
 
-    // EventModal callback — reload events list after save
-    window.DAEMS_EVENTS_RELOAD = function () { location.reload(); };
-
-    // Coverage update — called by event-modal.js after a locale-cards save.
-    // Updates the cached event's coverage map and repaints just that row's
-    // badge without a full page reload.
+    // Coverage update — kept around in case other code dispatches a coverage
+    // event after the user navigates back from /edit. Updates the cached
+    // event's coverage map and repaints just that row's badge.
     window.DAEMS_EVENTS_COVERAGE_UPDATE = function (entityId, coverage) {
         if (!entityId || !coverage) return;
         var ev = events.find(function (e) { return e.id === entityId; });
