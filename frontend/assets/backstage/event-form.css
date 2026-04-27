@@ -1,0 +1,439 @@
+/**
+ * Backstage event create/edit form layout.
+ *
+ * Full-width 2-column layout:
+ *   .event-form__col--left  — translations panel (locale-cards) takes full height
+ *   .event-form__col--right — chrome metadata + actions footer (sticky bottom)
+ *                             includes datetime pickers and image upload widgets
+ *
+ * Full-height mode (.event-form-panel--full-height + content--no-scroll on
+ * the <main> element) locks the page to the viewport so only the right
+ * column scrolls when content grows.
+ *
+ * Pairs with _form.php (markup) + event-form-page.js (chrome save/archive +
+ * image upload). Locale-cards styling lives in /pages/backstage/shared/locale-cards.css.
+ */
+
+/* ── Outer panel ────────────────────────────────────────────────────────── */
+.event-form-panel {
+    background: var(--surface-dark);
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-xs);
+    width: 100%;
+}
+
+/* ── Full-height mode: page stays put, content area is the only scroller ── */
+.content--no-scroll {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-height: 0;
+}
+
+.content--no-scroll > .page-header { flex-shrink: 0; margin-bottom: 0; }
+
+.event-form-panel--full-height {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.event-form-panel--full-height > .event-form {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.event-form-panel--full-height .event-form__cols {
+    height: 100%;
+    overflow: hidden;
+    align-items: stretch;
+}
+
+.event-form-panel--full-height .event-form__col--right {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.event-form-panel--full-height .event-form__col-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: var(--space-2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.event-form-panel--full-height .event-form__col--left {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.event-form-panel--full-height .event-form__field--grow {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-height: 0;
+    flex: 1 1 auto;
+}
+
+.event-form-panel--full-height .event-form__locales {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: var(--space-2);
+}
+
+.event-form-panel--full-height .event-form__col--right .event-form__actions {
+    flex-shrink: 0;
+    margin-top: var(--space-3);
+}
+
+.event-form__cols {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space-8);
+    align-items: start;
+}
+
+@media (max-width: 960px) {
+    .event-form__cols { grid-template-columns: 1fr; gap: var(--space-6); }
+}
+
+.event-form__col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-width: 0;
+}
+
+.event-form__col-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+/* ── Field row ──────────────────────────────────────────────────────────── */
+.event-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.event-form__field--grow { flex: 1 1 auto; }
+
+.event-form__label {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+}
+
+.event-form__label--required::after {
+    content: '*';
+    color: var(--status-error);
+    margin-left: 4px;
+}
+
+.event-form__hint {
+    font-size: 11px;
+    font-weight: var(--weight-regular);
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* ── Inputs ─────────────────────────────────────────────────────────────── */
+.event-form__input {
+    width: 100%;
+    box-sizing: border-box;
+    font: inherit;
+    font-size: var(--text-body);
+    color: var(--text-primary);
+    background: var(--surface-medium);
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-md);
+    padding: 9px 12px;
+    transition: border-color var(--transition-fast),
+                box-shadow var(--transition-fast),
+                background-color var(--transition-fast);
+}
+
+.event-form__input:hover:not([readonly]) {
+    border-color: var(--text-muted);
+}
+
+.event-form__input:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    background: var(--surface-dark);
+    box-shadow: 0 0 0 3px var(--brand-primary-subtle);
+}
+
+.event-form__input[readonly] {
+    background: var(--surface-light);
+    color: var(--text-secondary);
+    cursor: default;
+}
+
+.event-form__input.is-error,
+.event-form__input.is-error:focus {
+    border-color: var(--status-error);
+    box-shadow: 0 0 0 3px var(--status-error-subtle);
+}
+
+/* ── Datetime row: native date input + native time input side-by-side ─── */
+.event-form__datetime-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-2);
+    align-items: stretch;
+}
+
+.event-form__input--time {
+    width: auto;
+    min-width: 110px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ── Inline field-error + banner ─────────────────────────────────────── */
+.event-form__error {
+    font-size: var(--text-xs);
+    color: var(--status-error);
+    min-height: 1em;
+}
+
+.event-form__error-banner {
+    margin-top: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--status-error-subtle);
+    border: 1px solid var(--status-error);
+    border-radius: var(--radius-md);
+    color: var(--status-error);
+    font-size: var(--text-small);
+}
+
+/* ── Actions row ────────────────────────────────────────────────────────── */
+.event-form__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    justify-content: flex-end;
+    margin-top: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--surface-border);
+}
+
+.event-form__delete {
+    margin-right: auto;
+}
+
+/* Surface the locale-cards inline error/progress message inside actions row.
+   The component dispatches its own status text — only the spacing changes. */
+.event-form__actions .event-form__progress {
+    margin-right: auto;
+    font-size: var(--text-small);
+    color: var(--text-secondary);
+}
+
+/* ── Translations panel — strip locale-cards container chrome since the
+       left column already owns the panel-bordered styling. ─────────────── */
+.event-form__locales.locale-cards-container {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+/* ── Toggle switch (Online, Publish-now) — copied from project-form.css to
+       keep the form self-contained without depending on other module css. ── */
+.toggle-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    cursor: pointer;
+    user-select: none;
+}
+
+.toggle-switch input[type="checkbox"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.toggle-switch__track {
+    position: relative;
+    flex-shrink: 0;
+    width: 40px;
+    height: 22px;
+    background: var(--surface-lighter);
+    border-radius: var(--radius-full);
+    transition: background-color var(--transition-fast);
+}
+
+.toggle-switch__thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    background: var(--surface-dark);
+    border-radius: 50%;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+.toggle-switch input[type="checkbox"]:checked + .toggle-switch__track {
+    background: var(--brand-primary);
+}
+
+.toggle-switch input[type="checkbox"]:checked + .toggle-switch__track .toggle-switch__thumb {
+    transform: translateX(18px);
+    background: #fff;
+}
+
+.toggle-switch input[type="checkbox"]:focus-visible + .toggle-switch__track {
+    box-shadow: 0 0 0 3px var(--brand-primary-subtle);
+}
+
+.toggle-switch__label {
+    font-size: var(--text-small);
+    color: var(--text-secondary);
+}
+
+.toggle-switch input[type="checkbox"]:checked ~ .toggle-switch__label {
+    color: var(--text-primary);
+}
+
+/* ── Upload widget — drag-drop image zone + thumbnails. The widget JS
+       creates the .upload-drop-zone / .upload-thumbs / .upload-error sub-DOM
+       at runtime. Tokens follow the rest of the form so dark mode just
+       works. ──────────────────────────────────────────────────────────── */
+.upload-widget {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.upload-drop-zone {
+    border: 2px dashed var(--surface-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5) var(--space-4);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+    color: var(--text-secondary);
+    position: relative;
+    background: var(--surface-medium);
+}
+
+.upload-drop-zone:hover,
+.upload-drop-zone.is-over {
+    border-color: var(--brand-primary);
+    background: var(--brand-primary-subtle);
+}
+
+.upload-drop-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.upload-drop-zone__icon  { font-size: 1.6rem; line-height: 1; margin-bottom: 4px; }
+.upload-drop-zone__text  { font-size: var(--text-small); }
+.upload-drop-zone__hint  { font-size: 11px; margin-top: 4px; color: var(--text-muted); font-style: italic; }
+
+.upload-error {
+    font-size: var(--text-xs);
+    color: var(--status-error);
+    padding: 6px 10px;
+    background: var(--status-error-subtle);
+    border-radius: var(--radius-sm);
+}
+
+.upload-thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.upload-thumb {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--surface-border);
+    flex-shrink: 0;
+    background: var(--surface-light);
+}
+
+.upload-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.upload-thumb__del {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background-color var(--transition-fast);
+}
+
+.upload-thumb__del:hover { background: var(--status-error); }
+
+.upload-thumb--pending::after {
+    content: 'Pending';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    font-size: 9px;
+    text-align: center;
+    padding: 2px;
+}
