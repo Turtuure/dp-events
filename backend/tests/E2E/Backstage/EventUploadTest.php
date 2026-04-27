@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DaemsModule\Events\Tests\E2E\Backstage;
 
-use Daems\Domain\Event\Event;
-use Daems\Domain\Event\EventId;
+use DaemsModule\Events\Domain\Event;
+use DaemsModule\Events\Domain\EventId;
 use Daems\Domain\Shared\ValueObject\Uuid7;
 use Daems\Tests\Support\FrozenClock;
 use Daems\Tests\Support\KernelHarness;
