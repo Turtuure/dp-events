@@ -1,0 +1,313 @@
+/* ============================================================
+   Events admin — modal, upload widget, table, status pills
+   ============================================================ */
+
+/* ---- Status pills ---- */
+.evt-pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+.evt-pill--draft     { background: var(--surface-light);         color: var(--text-secondary); }
+.evt-pill--published { background: var(--status-success-subtle); color: var(--status-success); }
+.evt-pill--archived  { background: var(--status-warning-subtle); color: var(--status-warning); }
+
+/* ---- Events table page ---- */
+.events-admin { display: flex; flex-direction: column; gap: var(--space-4, 1.5rem); }
+
+.events-filters-card { margin-bottom: 0; }
+.events-filters-row  { display: flex; flex-wrap: wrap; gap: var(--space-3, 1rem); align-items: flex-end; }
+.events-field        { display: flex; flex-direction: column; gap: 4px; }
+.events-field--search { flex: 1 1 200px; }
+.events-label        { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); }
+
+.events-meta-row     { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: var(--space-2, 0.5rem); }
+.events-empty        { text-align: center; padding: var(--space-8, 3rem) 0; color: var(--text-secondary); }
+
+.events-table .evt-actions { white-space: nowrap; }
+
+.evt-action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    transition: color 0.15s, background 0.15s;
+}
+.evt-action svg { width: 18px; height: 18px; display: block; }
+.evt-action:hover       { background: var(--surface-light); color: var(--brand-primary); }
+.evt-action--warn:hover { color: var(--status-warning); }
+.evt-action--danger     { color: var(--status-error); }
+.evt-action--danger:hover { background: var(--status-error-subtle); }
+
+.btn--link {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--brand-primary);
+    font-size: inherit;
+    text-decoration: underline;
+}
+.btn--link:hover { color: var(--brand-primary-dim); }
+
+/* ---- Modal backdrop + container ---- */
+.evt-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4, 1.5rem);
+}
+.evt-modal-backdrop[hidden] { display: none; }
+
+.evt-modal {
+    background: var(--surface-dark);
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 680px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.evt-modal--wide { max-width: 860px; }
+
+.evt-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4, 1.5rem) var(--space-5, 2rem);
+    border-bottom: 1px solid var(--surface-border);
+    flex-shrink: 0;
+}
+.evt-modal__title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.evt-modal__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--text-secondary);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+.evt-modal__close:hover { background: var(--surface-light); }
+
+.evt-modal__body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: var(--space-5, 2rem);
+}
+
+.evt-modal__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-3, 1rem);
+    padding: var(--space-4, 1.5rem) var(--space-5, 2rem);
+    border-top: 1px solid var(--surface-border);
+    flex-shrink: 0;
+}
+
+/* ---- Form grid ---- */
+.evt-form { display: flex; flex-direction: column; gap: var(--space-4, 1.5rem); }
+
+.evt-form-row   { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3, 1rem); }
+.evt-form-row--3 { grid-template-columns: 1fr 1fr 1fr; }
+.evt-form-row--full { grid-template-columns: 1fr; }
+
+@media (max-width: 640px) {
+    .evt-form-row, .evt-form-row--3 { grid-template-columns: 1fr; }
+}
+
+.evt-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.evt-form-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+.evt-form-label--required::after {
+    content: ' *';
+    color: var(--status-error);
+}
+.evt-form-input,
+.evt-form-select,
+.evt-form-textarea {
+    width: 100%;
+    border: 1px solid var(--surface-border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    background: var(--surface-dark);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
+}
+.evt-form-input:focus,
+.evt-form-select:focus,
+.evt-form-textarea:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+.evt-form-input.is-error,
+.evt-form-select.is-error,
+.evt-form-textarea.is-error {
+    border-color: var(--status-error);
+}
+
+.evt-form-textarea { resize: vertical; min-height: 100px; }
+
+.evt-form-checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+}
+.evt-form-checkbox-row input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
+.evt-form-checkbox-row label { font-size: 0.9rem; cursor: pointer; user-select: none; }
+
+.evt-error-msg {
+    font-size: 0.78rem;
+    color: var(--status-error);
+    margin-top: 2px;
+}
+
+.evt-section-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0;
+    padding-bottom: var(--space-2, 0.5rem);
+    border-bottom: 1px solid var(--surface-border);
+}
+
+.evt-progress {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-left: auto;
+}
+
+/* ---- Upload widget ---- */
+.upload-widget { display: flex; flex-direction: column; gap: var(--space-3, 1rem); }
+
+.upload-drop-zone {
+    border: 2px dashed var(--surface-border);
+    border-radius: 8px;
+    padding: var(--space-6, 2.5rem) var(--space-4, 1.5rem);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    color: var(--text-secondary);
+    position: relative;
+}
+.upload-drop-zone:hover,
+.upload-drop-zone.is-over {
+    border-color: var(--brand-primary);
+    background: rgba(37,99,235,0.04);
+}
+.upload-drop-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+.upload-drop-zone__icon { font-size: 2rem; line-height: 1; margin-bottom: 8px; }
+.upload-drop-zone__text { font-size: 0.9rem; }
+.upload-drop-zone__hint { font-size: 0.78rem; margin-top: 4px; }
+
+.upload-error {
+    font-size: 0.82rem;
+    color: var(--status-error);
+    padding: 6px 10px;
+    background: var(--status-error-subtle);
+    border-radius: 4px;
+}
+
+.upload-thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2, 0.5rem);
+}
+.upload-thumb {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--surface-border);
+    flex-shrink: 0;
+}
+.upload-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.upload-thumb__del {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background 0.15s;
+}
+.upload-thumb__del:hover { background: var(--status-error); }
+.upload-thumb--pending::after {
+    content: 'Pending';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    font-size: 9px;
+    text-align: center;
+    padding: 2px;
+}
+
+/* Registrations table inside participants modal */
+.evt-reg-table { width: 100%; font-size: 0.88rem; }
+.evt-reg-table th,
+.evt-reg-table td { padding: 6px 10px; }
+
+/* btn--sm helper if not in global CSS */
+.btn--sm { padding: 4px 12px; font-size: 0.82rem; }
+
+/* Locale-cards integration — modal body spacing. The cards live inside an
+   evt-form-field wrapper; strip the field padding to let the cards breathe. */
+.evt-modal .locale-cards-container { margin: 0 0 1.25rem; }
