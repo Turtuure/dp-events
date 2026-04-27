@@ -1,0 +1,18 @@
+{
+  "name": "events",
+  "version": "1.0.0",
+  "description": "Events + event registrations + event proposals — public listing/detail/registration + admin CRUD + proposals workflow",
+  "namespace": "DaemsModule\\Events\\",
+  "src_path": "backend/src/",
+  "bindings": "backend/bindings.php",
+  "routes": "backend/routes.php",
+  "migrations_path": "backend/migrations/",
+  "frontend": {
+    "public_pages": "frontend/public/",
+    "backstage_pages": "frontend/backstage/",
+    "assets": "frontend/assets/"
+  },
+  "requires": {
+    "core": ">=1.0.0"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "daems/dp-events",
+  "description": "Events module for daems-platform",
+  "type": "project",
+  "license": "proprietary",
+  "autoload": {
+    "psr-4": {
+      "DaemsModule\\Events\\": "backend/src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "DaemsModule\\Events\\Tests\\": "backend/tests/"
+    }
+  },
+  "require": {
+    "php": "^8.3"
+  }
+}
