@@ -14,9 +14,7 @@
 
 declare(strict_types=1);
 
-if (!class_exists('ApiClient')) {
-    require_once DAEMS_SITE_PUBLIC . '/../src/ApiClient.php';
-}
+use Daems\Frontend\ApiClient;
 
 $pageTitle  = 'Events';
 $activePage = 'events';
@@ -279,4 +277,4 @@ window.DAEMS_EVENTS_TAB = <?= json_encode([
 
 <?php
 $pageContent = ob_get_clean();
-require DAEMS_SITE_PUBLIC . '/pages/backstage/layout.php';
+require DAEMS_SITE_PUBLIC . '/pages/layout.php';
