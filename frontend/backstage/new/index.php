@@ -45,9 +45,9 @@ ob_start();
     <?php include __DIR__ . '/../_form.php'; ?>
 </div>
 
-<link rel="stylesheet" href="/pages/backstage/shared/locale-cards.css">
+<link rel="stylesheet" href="/backstage/pages/shared/locale-cards.css">
 <link rel="stylesheet" href="/modules/events/assets/backstage/event-form.css">
-<script src="/pages/backstage/shared/locale-cards.js" defer></script>
+<script src="/backstage/pages/shared/locale-cards.js" defer></script>
 <script src="/modules/events/assets/backstage/upload-widget.js" defer></script>
 <script src="/modules/events/assets/backstage/event-form-page.js" defer></script>
 

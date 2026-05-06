@@ -265,7 +265,7 @@ $cardTabs = [
 <link rel="stylesheet" href="/modules/events/assets/backstage/event-modal.css">
 <link rel="stylesheet" href="/modules/events/assets/backstage/proposal-modal.css">
 <link rel="stylesheet" href="/modules/events/assets/backstage/events-admin.css">
-<link rel="stylesheet" href="/pages/backstage/shared/locale-cards.css">
+<link rel="stylesheet" href="/backstage/pages/shared/locale-cards.css">
 <script>
 window.DAEMS_EVENTS = <?= json_encode($initial, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>;
 window.DAEMS_EVENTS_TAB = <?= json_encode([
