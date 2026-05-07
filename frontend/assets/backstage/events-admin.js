@@ -131,16 +131,16 @@
                     '</button>' +
                 '</td>' +
                 '<td class="evt-actions">' +
-                    '<a class="evt-action" href="' + editHref + '" title="Edit">' +
+                    '<a class="evt-action" href="' + editHref + '" title="Edit" aria-label="Edit event">' +
                         '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm17.71-10.21a1 1 0 0 0 0-1.42l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.82z"/></svg>' +
                     '</a>' +
                     (canPub
-                        ? '<button type="button" class="evt-action" data-action="publish" data-id="' + escHtml(id) + '" title="Publish">' +
+                        ? '<button type="button" class="evt-action" data-action="publish" data-id="' + escHtml(id) + '" title="Publish" aria-label="Publish event">' +
                             '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm-1 14.5v-9l7 4.5z"/></svg>' +
                           '</button>'
                         : '') +
                     (canArc
-                        ? '<button type="button" class="evt-action evt-action--warn" data-action="archive" data-id="' + escHtml(id) + '" title="Archive">' +
+                        ? '<button type="button" class="evt-action evt-action--warn" data-action="archive" data-id="' + escHtml(id) + '" title="Archive" aria-label="Archive event">' +
                             '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20 2H4c-1.1 0-2 .9-2 2v3.01c0 .72.43 1.34 1 1.72V20c0 1.1 1.1 2 2 2h14c.9 0 2-.9 2-2V8.72c.57-.38 1-1 1-1.72V4c0-1.1-.9-2-2-2zm-5 12H9v-2h6v2zm5-8H4V4h16v2z"/></svg>' +
                           '</button>'
                         : '') +
