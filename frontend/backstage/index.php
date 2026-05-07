@@ -14,11 +14,9 @@
 
 declare(strict_types=1);
 
-if (!class_exists('ApiClient')) {
-    require_once DAEMS_SITE_PUBLIC . '/../src/ApiClient.php';
-}
+use Daems\Frontend\ApiClient;
 
-$pageTitle  = 'Events';
+$pageTitle  = 'backstage.title.events';
 $activePage = 'events';
 $breadcrumbs = [];
 
@@ -267,7 +265,7 @@ $cardTabs = [
 <link rel="stylesheet" href="/modules/events/assets/backstage/event-modal.css">
 <link rel="stylesheet" href="/modules/events/assets/backstage/proposal-modal.css">
 <link rel="stylesheet" href="/modules/events/assets/backstage/events-admin.css">
-<link rel="stylesheet" href="/pages/backstage/shared/locale-cards.css">
+<link rel="stylesheet" href="/backstage/pages/shared/locale-cards.css">
 <script>
 window.DAEMS_EVENTS = <?= json_encode($initial, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>;
 window.DAEMS_EVENTS_TAB = <?= json_encode([
@@ -279,4 +277,4 @@ window.DAEMS_EVENTS_TAB = <?= json_encode([
 
 <?php
 $pageContent = ob_get_clean();
-require DAEMS_SITE_PUBLIC . '/pages/backstage/layout.php';
+require DAEMS_SITE_PUBLIC . '/pages/layout.php';
