@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 use Daems\Frontend\ApiClient;
 
-$pageTitle  = 'Events';
+$pageTitle  = 'backstage.title.events';
 $activePage = 'events';
 $breadcrumbs = [];
 
