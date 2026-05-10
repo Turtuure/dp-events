@@ -137,6 +137,12 @@ return static function (Container $container): void {
         ),
     );
 
+    // Dashboard widgets — registered with the platform's WidgetRegistry singleton
+    // (already bound by daems-platform/bootstrap/app.php before module bindings run).
+    $registry = $container->make(\Daems\Domain\Dashboard\WidgetRegistry::class);
+    $registry->register(new \DaemsModule\Events\Frontend\Backstage\Widgets\EventsKpiWidget());
+    $registry->register(new \DaemsModule\Events\Frontend\Backstage\Widgets\UpcomingEventsListWidget());
+
     // Controllers
     $container->bind(EventController::class,
         static fn(Container $c) => new EventController(
