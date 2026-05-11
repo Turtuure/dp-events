@@ -92,6 +92,12 @@ final class EventsWidgetsTest extends TestCase
             {
                 return ['labels' => [], 'series' => []];
             }
+
+            /** @return array{supporting:int, basic:int, full:int, honorary:int} */
+            public function getMembersByTier(TenantId $tenantId): array
+            {
+                return ['supporting' => 0, 'basic' => 0, 'full' => 0, 'honorary' => 0];
+            }
         };
 
         return new GetAdminStats($repo);
